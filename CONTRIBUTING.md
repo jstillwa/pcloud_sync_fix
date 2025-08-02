@@ -1,12 +1,15 @@
 # Contributing to pCloud Sync Fixer
 
-Thank you for your interest in contributing to pCloud Sync Fixer! This document provides guidelines and information to help you contribute effectively.
+Thank you for your interest in contributing to pCloud Sync Fixer! This
+document provides guidelines and information to help you contribute
+effectively.
 
 ## How to Contribute
 
 ### Reporting Issues
 
-If you encounter a bug or have a feature request, please open an issue on GitHub with the following information:
+If you encounter a bug or have a feature request, please open an issue on
+GitHub with the following information:
 
 - A clear and descriptive title
 - A detailed description of the problem or enhancement
@@ -46,7 +49,8 @@ If you encounter a bug or have a feature request, please open an issue on GitHub
 
 - Ensure all existing tests pass before submitting your pull request
 - Add new tests for any functionality you introduce
-- Test your changes with a real pCloud database if possible (make sure to backup first!)
+- Test your changes with a real pCloud database if possible (make sure to
+  backup first!)
 
 ## Pull Request Process
 
@@ -63,6 +67,7 @@ If you encounter a bug or have a feature request, please open an issue on GitHub
 
 ## About the pCloud Database
 
-The [README](README.md) provides a comprehensive overview of the pCloud database structure and how the pCloud client manages its sync state.
+The [README](README.md) provides a comprehensive overview of the pCloud
+database structure and how the pCloud client manages its sync state.
 
 Thank you for helping improve pCloud Sync Fixer!

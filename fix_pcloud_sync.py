@@ -1,5 +1,4 @@
 import sqlite3
-import sys
 
 def fix_sync(db_path):
     """
