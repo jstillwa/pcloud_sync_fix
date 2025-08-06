@@ -7,14 +7,14 @@ name = "pcloud-sync-fixer"
 version = "0.1.0"
 description = "A Python script to fix stuck pCloud sync processes by manipulating the local SQLite database"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = {file = "LICENSE.md"}
 authors = [
   {name = "pCloud Sync Fixer Contributors"}
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: End Users/Desktop",
-  "License :: OSI Approved :: MIT License",
+  "License :: Other/Proprietary License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.6",
@@ -29,9 +29,9 @@ requires-python = ">=3.6"
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/your-username/pcloud-sync-fixer"
-Repository = "https://github.com/your-username/pcloud-sync-fixer"
-Issues = "https://github.com/your-username/pcloud-sync-fixer/issues"
+Homepage = "https://github.com/jstillwa/pcloud_sync_fix"
+Repository = "https://github.com/jstillwa/pcloud_sync_fix"
+Issues = "https://github.com/jstillwa/pcloud_sync_fix/issues"
 
 [project.scripts]
 pcloud-sync-fixer = "fix_pcloud_sync:main"

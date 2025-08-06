@@ -124,7 +124,7 @@ following relevant columns:
 ## License
 
 This project is licensed under the Creative Commons Attribution 4.0
-International License - see the [LICENSE](LICENSE) file for details.
+International License - see the [LICENSE](LICENSE.md) file for details.
 
 ## Disclaimer
 
