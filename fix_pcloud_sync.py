@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import time
+from typing import Optional
 
 def fix_sync(db_path):
     """
@@ -18,7 +19,7 @@ def fix_sync(db_path):
 
         if not result or result[0] is None:
             print("No stuck folder creation tasks found.")
-            cleanup_and_close(conn, db_path)
+
             return
 
         stuck_task_id = result[0]
@@ -45,10 +46,14 @@ def fix_sync(db_path):
         if conn:
             cleanup_and_close(conn, db_path)
 
-def cleanup_and_close(conn, db_path):
+def cleanup_and_close(conn: sqlite3.Connection, db_path: str) -> None:
     """
     Properly clean up SQLite WAL files by forcing a checkpoint and optionally
     changing the journal mode before closing the connection.
+    
+    Args:
+        conn: The SQLite database connection to clean up and close.
+        db_path: The file path to the SQLite database.
     """
     try:
         cursor = conn.cursor()
@@ -67,12 +72,25 @@ def cleanup_and_close(conn, db_path):
         # Uncomment the next line if you want to completely remove WAL files
         # cursor.execute("PRAGMA journal_mode = DELETE;")
         
+        # Get the actual database path from SQLite for extra robustness
+        # This ensures we get the correct path even if a relative path was provided
+        cursor.execute("PRAGMA database_list;")
+        db_info = cursor.fetchone()
+        if db_info and len(db_info) > 2:
+            # db_info[2] contains the file path of the main database
+            # Convert to absolute path to handle relative paths correctly
+            actual_db_path = os.path.abspath(db_info[2]) if db_info[2] else os.path.abspath(db_path)
+        else:
+            # Fallback to the provided path, converted to absolute
+            actual_db_path = os.path.abspath(db_path)
+        
         # Close the connection
         conn.close()
         
         # Check if WAL files still exist and wait for them to be cleaned up
-        wal_file = f"{db_path}-wal"
-        shm_file = f"{db_path}-shm"
+        # Use absolute path to ensure correct file references
+        wal_file = f"{actual_db_path}-wal"
+        shm_file = f"{actual_db_path}-shm"
         
         if os.path.exists(wal_file) or os.path.exists(shm_file):
             print("Waiting for WAL files to be cleaned up...")
@@ -91,8 +109,13 @@ def cleanup_and_close(conn, db_path):
         # Try to close the connection if it's still open
         try:
             conn.close()
-        except:
-            pass  # Connection might already be closed
+        except sqlite3.ProgrammingError as pe:
+            # Silently ignore "Cannot operate on a closed database" errors
+            if "closed database" not in str(pe).lower():
+                print(f"Error closing connection: {pe}")
+        except Exception as ex:
+            # Log any other unexpected errors during close
+            print(f"Unexpected error closing connection: {ex}")
 
 if __name__ == "__main__":
     import os
