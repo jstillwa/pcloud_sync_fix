@@ -18,7 +18,7 @@ def fix_sync(db_path):
 
         if not result or result[0] is None:
             print("No stuck folder creation tasks found.")
-            cleanup_and_close(conn)
+            cleanup_and_close(conn, db_path)
             return
 
         stuck_task_id = result[0]
@@ -43,9 +43,9 @@ def fix_sync(db_path):
         print(f"An error occurred: {e}")
     finally:
         if conn:
-            cleanup_and_close(conn)
+            cleanup_and_close(conn, db_path)
 
-def cleanup_and_close(conn):
+def cleanup_and_close(conn, db_path):
     """
     Properly clean up SQLite WAL files by forcing a checkpoint and optionally
     changing the journal mode before closing the connection.
@@ -71,8 +71,8 @@ def cleanup_and_close(conn):
         conn.close()
         
         # Check if WAL files still exist and wait for them to be cleaned up
-        wal_file = f"{conn.database}-wal"
-        shm_file = f"{conn.database}-shm"
+        wal_file = f"{db_path}-wal"
+        shm_file = f"{db_path}-shm"
         
         if os.path.exists(wal_file) or os.path.exists(shm_file):
             print("Waiting for WAL files to be cleaned up...")
@@ -88,8 +88,11 @@ def cleanup_and_close(conn):
             
     except Exception as e:
         print(f"Error during cleanup: {e}")
-        if not conn.closed:
+        # Try to close the connection if it's still open
+        try:
             conn.close()
+        except:
+            pass  # Connection might already be closed
 
 if __name__ == "__main__":
     import os
